@@ -14,6 +14,8 @@ const BASE = {
   mark:      { rotY: -0.45,          rotX: 0.08,  x: 2.3,  y: -1.1,  scale: 1.5,  white: 0, hud: 0 },
   word:      { rotY: Math.PI + 0.35, rotX: 0.04,  x: -1.9, y: -0.2,  scale: 1.2,  white: 0, hud: 0 },
   colorway:  { rotY: TAU,            rotX: 0,     x: 0,    y: -0.05, scale: 0.9,  white: 1, hud: 0 },
+  // The Fit: square to the camera, like the flat-lay diagram beside it
+  fit:       { rotY: TAU,            rotX: 0,     x: 2.1,  y: -0.1,  scale: 1.0,  white: 0, hud: 1 },
   // The Drop: pinned; one pose per stat as it becomes active
   stat0:     { rotY: TAU - 0.45,     rotX: 0.05,  x: 0,    y: 0.45,  scale: 0.8,  white: 0, hud: 1 },
   stat1:     { rotY: TAU + 0.6,      rotX: -0.05, x: 0,    y: 0.45,  scale: 0.8,  white: 0, hud: 1 },
@@ -41,6 +43,8 @@ const MOBILE = {
   'p-hero': { y: -0.7, scale: 0.95 },
   mark: { y: 1.05, scale: 1.1 },
   word: { y: 1.05, scale: 1.05 },
+  // the fit diagram is tall on phones; the tee steps out of frame and lets it breathe
+  fit: { y: 6, scale: 0.6, hud: 0 },
   shop: { track: '.shop-gap', scale: 0.85 },
   next: { track: '.next-gap', scale: 0.8 },
   't-hero': { y: -0.45, scale: 0.95 },

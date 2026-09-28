@@ -12,9 +12,9 @@ const SHOPEE = {
 }
 
 export const PRICE = 'NT$700'
-const SIZES = ['S', 'M', 'L']
+export const SIZES = ['S', 'M', 'L']
 // Measurements in cm, from the official BELIEVE sizing chart.
-const SIZE_CHART = {
+export const SIZE_CHART = {
   S: { length: 66, chest: 49, shoulder: 47, sleeve: 21 },
   M: { length: 69, chest: 52, shoulder: 50, sleeve: 22 },
   L: { length: 72, chest: 55, shoulder: 53, sleeve: 22 },

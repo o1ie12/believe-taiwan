@@ -3,6 +3,7 @@ import Lookbook from '../Lookbook'
 import { DropStats, SectionTitle } from '../hud'
 import { Link } from '../router'
 import { PRICE, PRODUCTS, ProductCard, ShopSection } from '../shop'
+import { FitDiagram, Specs } from '../fit'
 
 export default function Believe01() {
   useEffect(() => {
@@ -31,9 +32,16 @@ export default function Believe01() {
           <p className="eyebrow">Front</p>
           <p className="lead">
             A star to follow.{' '}
-            <span className="dim">Like the star that led the wise men, the B★ points past itself. Worn on the chest, italic and leaning forward — for those who run with perseverance the race marked out for them.</span>
+            <span className="dim">Like the star that led the wise men, the B★ points past itself — for those who run with perseverance the race marked out for them.</span>
           </p>
           <p className="ref mono">[ Hebrews 12:1 ]</p>
+          <Specs
+            rows={[
+              ['Print', 'B★ mark'],
+              ['Placement', 'Centered on the chest'],
+              ['Color', 'White on black · Black on white'],
+            ]}
+          />
         </div>
       </section>
 
@@ -43,9 +51,16 @@ export default function Believe01() {
           <p className="eyebrow">Back</p>
           <p className="lead">
             Not I, but Christ.{' '}
-            <span className="dim">Look closely: the cross stands where the I should be. BELIEVE runs shoulder to shoulder, carried the way you carry your faith — everywhere you go. TAIWAN underneath, where it all starts.</span>
+            <span className="dim">Look closely: the cross stands where the I should be — carried the way you carry your faith, everywhere you go.</span>
           </p>
           <p className="ref mono">[ Galatians 2:20 ]</p>
+          <Specs
+            rows={[
+              ['Print', 'BELIEVE wordmark, arched, with TAIWAN beneath'],
+              ['Placement', 'Upper back, shoulder to shoulder'],
+              ['Detail', 'A cross in place of the I'],
+            ]}
+          />
         </div>
       </section>
 
@@ -61,12 +76,25 @@ export default function Believe01() {
         </div>
       </section>
 
+      <section id="fit" className="panel">
+        <SectionTitle n="04">The Fit</SectionTitle>
+        {/* pose anchor on the copy: the tee settles while the diagram is being read */}
+        <div className="copy wide reveal" data-pose="fit">
+          <p className="eyebrow">Sizing</p>
+          <p className="lead">
+            Three sizes, one cut.{' '}
+            <span className="dim">Pick a size to see its measurements, in centimetres.</span>
+          </p>
+          <FitDiagram />
+        </div>
+      </section>
+
       <DropStats />
 
       <Lookbook />
 
       <ShopSection>
-        <SectionTitle n="06">Shop</SectionTitle>
+        <SectionTitle n="07">Shop</SectionTitle>
         <p className="shop-sub lead reveal">
           BELIEVE 01. <span className="dim">{PRICE} · Limited to 40 pieces total across black and white. Wear what you believe.</span>
         </p>

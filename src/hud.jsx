@@ -263,7 +263,7 @@ export function DropStats() {
         />
       ))}
       <div className="drop-sticky">
-        <SectionTitle n="04">The Drop</SectionTitle>
+        <SectionTitle n="05">The Drop</SectionTitle>
         <p className="drop-note lead reveal">
           Forty pieces.{' '}
           <span className="dim">In Scripture, forty marks a season of testing before a promise — forty days of rain, forty years in the desert, forty days in the wilderness.</span>

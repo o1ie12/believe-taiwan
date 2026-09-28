@@ -26,6 +26,7 @@ export const SECTIONS_01 = [
   ['mark', 'The Mark'],
   ['word', 'The Word'],
   ['colorway', 'Colorway'],
+  ['fit', 'The Fit'],
   ['details', 'The Drop'],
   ['lookbook', 'Lookbook'],
   ['shop', 'Shop'],

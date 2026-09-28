@@ -139,6 +139,11 @@ export default function Lookbook() {
     const tick = () => {
       const vw = window.innerWidth, vh = window.innerHeight
       const el = intro.current
+      // refs are null for a frame when the page is being swapped out
+      if (!el || !hs.current || !railRef.current) {
+        raf = requestAnimationFrame(tick)
+        return
+      }
       const r = el.getBoundingClientRect()
       if (r.bottom > 0 && r.top < vh) {
         const p = clamp(-r.top / (r.height - vh), 0, 1)
@@ -199,7 +204,7 @@ export default function Lookbook() {
           <div className="lb-frame">
             <img src={HERO.src} alt={HERO.alt} />
           </div>
-          <p className="eyebrow lb-label">05 — Lookbook</p>
+          <p className="eyebrow lb-label">06 — Lookbook</p>
           <h2 className="lb-title" aria-label="Worn in the city">
             <span className="lb-title-a">Worn in</span>
             <span className="lb-title-b">the city</span>
@@ -218,7 +223,7 @@ export default function Lookbook() {
               if (item.type === 'intro')
                 return (
                   <div className="hs-item hs-text hs-intro" key={k}>
-                    <p className="eyebrow">05 — Lookbook</p>
+                    <p className="eyebrow">06 — Lookbook</p>
                     <h2>Worn, not styled.</h2>
                     <p className="hs-body">Shot around Taipei. Tap any photo to open it.</p>
                     <p className="mono hs-hint">Keep scrolling →</p>
