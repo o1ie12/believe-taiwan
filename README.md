@@ -24,11 +24,23 @@ Outputs a static site in `dist/`. On Netlify: build command `npm run build`, pub
 Set `VITE_SITE_URL` (in `.env` or the host's environment variables) to the live address, e.g.
 `https://believetaiwan.com`, so link previews on LINE / Instagram / Facebook find the share image.
 
+## Pages
+
+| URL | Page | File |
+| --- | --- | --- |
+| `/` | Brand home: hero, faith statement, drop chooser | `src/pages/Home.jsx` |
+| `/believe-01` | BELIEVE 01 product page | `src/pages/Believe01.jsx` |
+| `/believe-02` | BELIEVE 02 teaser (no details confirmed yet) | `src/pages/Believe02.jsx` |
+
+Routing is a small in-house router (`src/router.jsx`) with a curtain transition; `public/_redirects`
+makes Netlify serve the app for every URL. Drops shown in the chooser and menu: `src/drops.js`.
+
 ## Where things live
 
 | What | Where |
 | --- | --- |
-| Page content and shop (Shopee links: `SHOPEE`) | `src/App.jsx` |
+| App shell, footer | `src/App.jsx` |
+| Shop cards, size guide (Shopee links: `SHOPEE`) | `src/shop.jsx` |
 | Loader, info bar, menu, scope overlay, stats | `src/hud.jsx` |
 | Lookbook photos and horizontal track (`PHOTOS`, `TRACK`) | `src/Lookbook.jsx` |
 | 3D scene, materials, lighting | `src/Scene.jsx` |

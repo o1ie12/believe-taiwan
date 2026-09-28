@@ -42,13 +42,14 @@ function readScrollPose(out, table = POSES) {
   const span = d[i + 1] - d[i]
   const t = span > 0 ? smooth(THREE.MathUtils.clamp(-d[i] / span, 0, 1)) : 0
   for (const k of KEYS) out[k] = a[k] + (b[k] - a[k]) * t
-  // Hovering a product card fades the tee to that colorway, weighted by how
-  // close we are to the shop pose (full strength while the shop is pinned).
-  if (ui.shopWhite !== null) {
-    const aShop = els[i].dataset.pose === 'shop'
-    const bShop = bEl !== els[i] && bEl.dataset.pose === 'shop'
-    const w = (aShop ? 1 - t : 0) + (bShop ? t : 0)
-    out.white += ((ui.shopWhite ? 1 : 0) - out.white) * w
+  // Hover previews (product card colorway, drop chooser), weighted by how
+  // close we are to the pose they belong to (full strength when parked on it).
+  const h = ui.hover
+  if (h) {
+    const aOn = els[i].dataset.pose === h.pose
+    const bOn = bEl !== els[i] && bEl.dataset.pose === h.pose
+    const w = (aOn ? 1 - t : 0) + (bOn ? t : 0)
+    for (const k in h.values) out[k] += (h.values[k] - out[k]) * w
   }
   return out
 }
@@ -143,10 +144,10 @@ function Tee({ tee, fabricRepeat }) {
   const backMat = useMemo(() => inkMat(backTex), [backTex])
 
   // Start below and turned away so the tee "arrives" on load.
-  const cur = useRef({ rotY: -Math.PI * 1.2, rotX: 0.5, x: 0, y: -4.5, scale: 0.7, white: 0, hud: 0 })
+  const cur = useRef({ rotY: -Math.PI * 1.2, rotX: 0.5, x: 0, y: -4.5, scale: 0.7, white: 0, hud: 0, ink: 1 })
   const target = useRef({})
   const hud = useRef(null)
-  const gapEl = useRef(null)
+  const nameEl = useRef(null)
   const rotEl = useRef(null)
   const tmp = useMemo(() => new THREE.Vector3(), [])
 
@@ -155,11 +156,13 @@ function Tee({ tee, fabricRepeat }) {
     const pxPerUnit = size.height / (2 * 12 * Math.tan((15 * Math.PI) / 180))
     const phone = size.width < 820
     if (phone) {
-      // on phones the shop scrolls normally and the tee rides in the gap above the cards
-      const gap = gapEl.current || (gapEl.current = document.querySelector('.shop-gap'))
-      if (gap) {
-        const gr = gap.getBoundingClientRect()
-        MOBILE_POSES.shop.y = (size.height / 2 - (gr.top + gr.height / 2)) / pxPerUnit
+      // phone poses with `track` ride along with an element (e.g. the gap above cards)
+      for (const pose of Object.values(MOBILE_POSES)) {
+        if (!pose.track) continue
+        const el = document.querySelector(pose.track)
+        if (!el) continue
+        const r = el.getBoundingClientRect()
+        pose.y = (size.height / 2 - (r.top + r.height / 2)) / pxPerUnit
       }
     }
     const t = readScrollPose(target.current, phone ? MOBILE_POSES : POSES)
@@ -185,6 +188,9 @@ function Tee({ tee, fabricRepeat }) {
       ring.style.setProperty('--y', `${(((1 - v.y) / 2) * size.height).toFixed(1)}px`)
       ring.style.setProperty('--d', `${(4.1 * c.scale * sScale * pxPerUnit).toFixed(1)}px`)
       ring.style.setProperty('--o', c.hud.toFixed(3))
+      const name = nameEl.current?.isConnected ? nameEl.current : (nameEl.current = document.getElementById('hud-name'))
+      const label = c.ink > 0.5 ? '[ BELIEVE 01 ]' : '[ BELIEVE 02 ]'
+      if (name && name.textContent !== label) name.textContent = label
       const rot = rotEl.current || (rotEl.current = document.getElementById('hud-rot'))
       if (rot) {
         const deg = Math.round((((c.rotY + pointer.x * 0.22) * 180) / Math.PI) % 360 + 360) % 360
@@ -199,6 +205,9 @@ function Tee({ tee, fabricRepeat }) {
     innerMat.color.copy(outerMat.color).multiplyScalar(0.4)
     frontMat.color.lerpColors(INK_WHITE, INK_BLACK, c.white)
     backMat.color.copy(frontMat.color)
+    // prints fade out for the BELIEVE 02 silhouette
+    frontMat.opacity = backMat.opacity = c.ink
+    frontMat.visible = backMat.visible = c.ink > 0.01
   })
 
   return (

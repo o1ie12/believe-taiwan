@@ -34,7 +34,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
    purely visual (tilt reads window events), so never let it swallow clicks. */
 .scene * { pointer-events: none !important; }
 main, .footer { position: relative; }
-.copy, .hero-foot, .shop-grid, .shop-sub, .footer > *, .colorway > p { position: relative; z-index: 2; }
+.copy, .hero-foot, .shop-grid, .shop-sub, .footer > *, .colorway > p,
+.chooser-sub, .chooser-grid, .t-soon-cta, .t-stats, .next-drop, .p-eyebrow, .t-eyebrow { position: relative; z-index: 2; }
 
 /* ---------- Type ---------- */
 .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; }
@@ -95,16 +96,20 @@ main, .footer { position: relative; }
 @keyframes menuIn { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
 .menu-head { display: flex; justify-content: space-between; align-items: center; color: var(--muted); }
 .menu-list { align-self: center; display: grid; }
-.menu-list a {
+.menu-item { border-bottom: 1px solid var(--line); animation: menuItem .9s var(--ease) both; animation-delay: calc(var(--i) * 70ms + 250ms); }
+.menu-item > a {
   display: flex; align-items: baseline; gap: 24px;
   font-size: clamp(44px, 7.5vw, 120px); font-weight: 200; letter-spacing: -0.04em; line-height: 1.02;
-  border-bottom: 1px solid var(--line);
-  animation: menuItem .9s var(--ease) both; animation-delay: calc(var(--i) * 60ms + 250ms);
   transition: color .3s, padding .5s var(--ease);
 }
-.menu-list a .mono { color: var(--muted); }
-.menu-list:hover a { color: var(--dim); }
-.menu-list a:hover { color: var(--fg); padding-left: 16px; }
+.menu-item > a .mono { color: var(--muted); }
+.menu-list:hover .menu-item > a { color: var(--dim); }
+.menu-list .menu-item > a:hover { color: var(--fg); padding-left: 16px; }
+.menu-item.is-here > a { color: var(--fg); }
+.menu-tag { align-self: center; border: 1px solid var(--line); border-radius: 4px; padding: 3px 8px; }
+.menu-sub { display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 0 0 18px 52px; }
+.menu-sub a { font-size: 14px; color: var(--muted); transition: color .2s; }
+.menu-sub a:hover { color: var(--fg); }
 @keyframes menuItem { from { opacity: 0; transform: translateY(40px); } }
 .menu-foot { color: var(--muted); }
 
@@ -421,6 +426,75 @@ html:not(.loaded) .scope-h { transform: scaleX(0); }
 .lb-nav button { height: 30px; min-width: 30px; padding: 0 12px; border-radius: 4px; background: rgba(238,237,232,0.1); font-size: 13px; transition: background .2s, color .2s; }
 .lb-nav button:hover { background: var(--fg); color: var(--bg); }
 
+/* ---------- Page curtain ---------- */
+.curtain {
+  position: fixed; inset: 0; z-index: 90; background: var(--bg);
+  display: grid; place-items: center; pointer-events: none;
+  transform: translateY(100%);
+}
+.curtain img { width: 72px; opacity: 0; transition: opacity .3s .25s; }
+.curtain-in { transform: translateY(0); transition: transform .65s var(--ease-io); pointer-events: auto; }
+.curtain-in img { opacity: 1; }
+.curtain-out { transform: translateY(-100%); transition: transform .75s var(--ease-io); }
+
+/* ---------- BELIEVE 01 hero ---------- */
+.p-hero { position: relative; height: 100vh; min-height: 560px; overflow: hidden; padding: 0 var(--gutter); }
+.p-eyebrow { position: absolute; top: 16vh; left: var(--gutter); }
+.p-title {
+  position: absolute; z-index: 0; left: calc(var(--gutter) - 0.04em); top: 50%; transform: translateY(-58%);
+  font-size: clamp(64px, 12.5vw, 220px); font-weight: 300; letter-spacing: -0.055em; line-height: 0.9; white-space: nowrap;
+  opacity: 0;
+}
+.loaded .p-title { animation: titleIn 1.4s var(--ease) .1s both; }
+@keyframes titleIn { from { opacity: 0; transform: translateY(-40%); filter: blur(8px); } to { opacity: 1; transform: translateY(-58%); filter: blur(0); } }
+
+/* ---------- Home: drop chooser ---------- */
+.chooser { position: relative; min-height: 120vh; padding: 14vh var(--gutter) 12vh; display: flex; flex-direction: column; }
+.chooser-sub { margin: 4vh 0 6vh; }
+.chooser-grid { display: grid; grid-template-columns: 1fr minmax(260px, 1.2fr) 1fr; gap: 24px; align-items: center; margin: auto 0; }
+.drop-panel {
+  display: grid; gap: 6px; padding: 26px; border: 1px solid var(--line); border-radius: 6px;
+  background: rgba(14, 14, 14, 0.55); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  transition: border-color .3s, transform .5s var(--ease);
+}
+.drop-panel:hover { border-color: rgba(238,237,232,0.4); transform: translateY(-4px); }
+.drop-panel h3 { font-weight: 300; font-size: clamp(32px, 3vw, 44px); letter-spacing: -0.035em; margin: 16px 0 2px; }
+.drop-meta { color: var(--muted); font-size: 14px; }
+.drop-cta { margin-top: 22px; display: inline-flex; gap: 8px; font-size: 14px; }
+.drop-cta span { transition: transform .35s var(--ease); }
+.drop-panel:hover .drop-cta span { transform: translateX(6px); }
+.drop-panel.is-soon { border-style: dashed; }
+.drop-panel.is-soon h3 { color: var(--muted); }
+
+/* ---------- BELIEVE 01 → next drop ---------- */
+.next-drop { min-height: 70vh; display: flex; align-items: center; padding: 10vh var(--gutter); border-top: 1px solid var(--line); }
+.next-link { width: 100%; display: grid; grid-template-columns: 1fr minmax(240px, 22vw) 1fr; align-items: end; gap: 28px; }
+.next-label { display: grid; gap: 14px; }
+.next-name { font-size: clamp(40px, 5.5vw, 96px); font-weight: 300; letter-spacing: -0.05em; line-height: 1; color: var(--muted); transition: color .4s; }
+.next-cta { justify-self: end; }
+.next-link:hover .next-name { color: var(--fg); }
+.next-cta { color: var(--muted); }
+
+/* ---------- BELIEVE 02 teaser ---------- */
+.t-hero { position: relative; height: 100vh; min-height: 560px; overflow: hidden; }
+.t-eyebrow { position: absolute; top: 16vh; left: var(--gutter); }
+.t-word {
+  position: absolute; z-index: 0; top: 50%; left: 50%; transform: translate(-50%, -54%);
+  font-size: clamp(64px, 15vw, 260px); font-weight: 300; letter-spacing: -0.055em; line-height: 1; white-space: nowrap;
+  color: transparent; -webkit-text-stroke: 1px rgba(238, 237, 232, 0.35);
+  opacity: 0;
+}
+.loaded .t-word { animation: rise 1.8s var(--ease) .15s both; }
+.t-verse-rest { margin-top: 18px; }
+.t-soon { position: relative; min-height: 115vh; padding: 14vh var(--gutter) 0; display: grid; grid-template-rows: auto auto 1fr auto; }
+.t-soon-cta { margin-top: 4vh; max-width: min(400px, 32vw); }
+.t-links { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; margin-top: 26px; }
+.t-links .add { width: auto; padding: 0 22px; }
+.t-back { font-size: 14px; color: var(--muted); transition: color .2s; }
+.t-back:hover { color: var(--fg); }
+.t-soon-gap { grid-row: 3; }
+.t-stats { grid-row: 4; }
+
 /* ---------- Mobile ---------- */
 @media (max-width: 820px) {
   .bar { grid-template-columns: auto 1fr auto; }
@@ -432,6 +506,17 @@ html:not(.loaded) .scope-h { transform: scaleX(0); }
   .statement { min-height: 100vh; align-items: flex-start; padding-top: 14vh; }
   .lb-label { display: none; }
   .shop { --hold: 0px; }
+  .p-title { font-size: 19vw; top: 26%; }
+  .p-eyebrow { top: 13vh; }
+  .chooser-grid { grid-template-columns: 1fr; }
+  .chooser-gap { height: 44vh; order: -1; }
+  .next-link { grid-template-columns: 1fr; gap: 8px; }
+  .next-gap { display: block; height: 38vh; order: 2; }
+  .next-cta { justify-self: start; order: 3; }
+  .t-word { font-size: 19vw; top: 25%; }
+  .t-soon-gap { height: 42vh; }
+  .t-stats { grid-template-columns: repeat(2, 1fr); }
+  .t-soon-cta { max-width: none; }
   .shop-pin { position: relative; top: auto; }
   .statement .ref { margin-top: 28px; }
 .statement-text { font-size: 14vw; }
@@ -461,6 +546,7 @@ html:not(.loaded) .scope-h { transform: scaleX(0); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .reveal { opacity: 1; transform: none; }
-  .hero-word, .hero-foot { opacity: 1; }
+  .hero-word, .hero-foot, .p-title, .t-word { opacity: 1; }
+  .curtain-in, .curtain-out { transition: none; }
   .stitle h2 { color: var(--fg); transform: none; }
 }

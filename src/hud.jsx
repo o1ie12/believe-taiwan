@@ -1,8 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { useProgress } from '@react-three/drei'
 import { scroll } from './scroll'
+import { Link, useRouter } from './router'
+import { DROPS, SECTIONS_01 } from './drops'
 
 const clamp = (x, a, b) => Math.min(b, Math.max(a, x))
+
+export function Wordmark({ className = '' }) {
+  return <img className={`wordmark ${className}`} src="/brand/wordmark.png" alt="BELIEVE" />
+}
 
 // Full-screen intro that counts up while the 3D assets load.
 export function Loader() {
@@ -57,16 +63,8 @@ export function Loader() {
   )
 }
 
-const MENU = [
-  ['#mark', 'The Mark'],
-  ['#word', 'The Word'],
-  ['#colorway', 'Colorway'],
-  ['#details', 'The Drop'],
-  ['#lookbook', 'Lookbook'],
-  ['#shop', 'Shop'],
-]
-
 function Menu({ onClose }) {
+  const { path, navigate } = useRouter()
   useEffect(() => {
     scroll.lenis?.stop()
     const onKey = (e) => e.key === 'Escape' && onClose()
@@ -77,11 +75,13 @@ function Menu({ onClose }) {
     }
   }, [onClose])
 
-  const go = (e, href) => {
+  const go = (e, to) => {
     e.preventDefault()
     onClose()
-    requestAnimationFrame(() => scroll.lenis?.scrollTo(href, { duration: 1.8 }))
+    // wait a frame so smooth scrolling is running again before we move
+    requestAnimationFrame(() => navigate(to))
   }
+  const items = [{ path: '/', name: 'Home' }, ...DROPS]
 
   return (
     <div className="menu" role="dialog" aria-modal="true" aria-label="Menu">
@@ -90,11 +90,21 @@ function Menu({ onClose }) {
         <button className="chip" onClick={onClose}>Close</button>
       </div>
       <nav className="menu-list">
-        {MENU.map(([href, label], i) => (
-          <a key={href} href={href} onClick={(e) => go(e, href)} style={{ '--i': i }}>
-            <span className="mono">{String(i + 1).padStart(2, '0')}</span>
-            {label}
-          </a>
+        {items.map((d, i) => (
+          <div key={d.path} className={`menu-item ${path === d.path ? 'is-here' : ''}`} style={{ '--i': i }}>
+            <a href={d.path} onClick={(e) => go(e, d.path)}>
+              <span className="mono">{String(i).padStart(2, '0')}</span>
+              {d.name}
+              {d.soon && <span className="mono menu-tag">Soon</span>}
+            </a>
+            {d.path === '/believe-01' && (
+              <div className="menu-sub">
+                {SECTIONS_01.map(([id, label]) => (
+                  <a key={id} href={`/believe-01#${id}`} onClick={(e) => go(e, `/believe-01#${id}`)}>{label}</a>
+                ))}
+              </div>
+            )}
+          </div>
         ))}
       </nav>
       <p className="menu-foot mono">BELIEVE — Everything is possible for one who believes — Mark 9:23</p>
@@ -102,8 +112,17 @@ function Menu({ onClose }) {
   )
 }
 
+// What the info bar says on each page.
+const BAR = {
+  '/': ['BELIEVE — Taiwan', 'BELIEVE 01 · BELIEVE 02 soon'],
+  '/believe-01': ['BELIEVE 01 — Limited tee', '40 pieces · Black / White'],
+  '/believe-02': ['BELIEVE 02 — Coming soon', 'Reveal on Instagram'],
+}
+
 // Thin technical info bar across the top, with a live Taipei clock.
 export function InfoBar() {
+  const { path } = useRouter()
+  const [a, b] = BAR[path] || BAR['/']
   const [time, setTime] = useState('')
   const [open, setOpen] = useState(false)
   useEffect(() => {
@@ -119,14 +138,14 @@ export function InfoBar() {
   return (
     <>
       <header className="bar">
-        <a href="#top" className="bar-logo" aria-label="BELIEVE — back to top">
+        <Link to="/" className="bar-logo" aria-label="BELIEVE — home">
           <img src="/brand/wordmark.png" alt="" />
-        </a>
-        <span className="bar-item bar-dot">BELIEVE 01 — Limited tee</span>
-        <span className="bar-item">40 pieces · Black / White</span>
+        </Link>
+        <span className="bar-item bar-dot">{a}</span>
+        <span className="bar-item">{b}</span>
         <span className="bar-item mono">TPE {time}</span>
         <div className="bar-actions">
-          <a href="#shop" className="chip">Shop</a>
+          <Link to="/believe-01#shop" className="chip">Shop</Link>
           <button className="chip" onClick={() => setOpen(true)} aria-haspopup="dialog">Menu</button>
         </div>
       </header>
@@ -147,7 +166,7 @@ export function Scope() {
           <circle cx="50" cy="50" r="44" className="ring-dash" />
           <path d="M50 0.4v4 M50 95.6v4 M0.4 50h4 M95.6 50h4" className="ring-ticks" />
         </svg>
-        <span className="hud-label hud-top mono">[ BELIEVE 01 ]</span>
+        <span className="hud-label hud-top mono" id="hud-name">[ BELIEVE 01 ]</span>
         <span className="hud-label hud-bottom mono">ROT <b id="hud-rot">000</b>°</span>
       </div>
     </div>
