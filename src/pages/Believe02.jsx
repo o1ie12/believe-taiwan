@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { FillStatement, SectionTitle } from '../hud'
 import { Link } from '../router'
+import { PinnedSection } from '../pinned'
 
 const INSTAGRAM = 'https://www.instagram.com/believeapparel__/'
 
@@ -42,7 +43,7 @@ export default function Believe02() {
         </div>
       </section>
 
-      <section className="t-soon" data-pose="t-soon">
+      <PinnedSection pose="t-soon" className="t-soon">
         <SectionTitle n="02">Soon</SectionTitle>
         <div className="t-soon-cta reveal">
           <p className="lead">
@@ -64,7 +65,7 @@ export default function Believe02() {
             </div>
           ))}
         </div>
-      </section>
+      </PinnedSection>
     </>
   )
 }

@@ -238,12 +238,11 @@ html:not(.loaded) .scope-h { transform: scaleX(0); }
 .stat[data-on] .mono { color: var(--muted); }
 
 /* ---------- Shop ---------- */
-.shop { position: relative; --hold: 70vh; height: calc(var(--pin-h, 100vh) + var(--hold)); }
-/* Sticks once fully in view (top goes negative if the content is taller than the screen). */
-.shop-pin {
-  position: sticky; top: min(0px, calc(100vh - var(--pin-h, 100vh)));
-  min-height: 100vh; padding: 12vh var(--gutter) 64px; display: flex; flex-direction: column;
-}
+/* Pinned sections (shop, home Drops, BELIEVE 02 Soon) stick once fully in view —
+   top goes negative if the content is taller than the screen — then hold for --hold. */
+.pinned { position: relative; --hold: 70vh; height: calc(var(--pin-h, 100vh) + var(--hold)); }
+.pin { position: sticky; top: min(0px, calc(100vh - var(--pin-h, 100vh))); min-height: 100vh; }
+.shop-pin { padding: 12vh var(--gutter) 64px; display: flex; flex-direction: column; }
 .shop-sub { margin: 4vh 0 6vh; max-width: 640px; }
 .shop-grid { display: grid; grid-template-columns: 1fr minmax(260px, 1.2fr) 1fr; gap: 24px; width: 100%; align-items: center; margin-top: auto; margin-bottom: auto; }
 .card {
@@ -449,7 +448,7 @@ html:not(.loaded) .scope-h { transform: scaleX(0); }
 @keyframes titleIn { from { opacity: 0; transform: translateY(-40%); filter: blur(8px); } to { opacity: 1; transform: translateY(-58%); filter: blur(0); } }
 
 /* ---------- Home: drop chooser ---------- */
-.chooser { position: relative; min-height: 120vh; padding: 14vh var(--gutter) 12vh; display: flex; flex-direction: column; }
+.chooser { padding: 14vh var(--gutter) 8vh; display: flex; flex-direction: column; }
 .chooser-sub { margin: 4vh 0 6vh; }
 .chooser-grid { display: grid; grid-template-columns: 1fr minmax(260px, 1.2fr) 1fr; gap: 24px; align-items: center; margin: auto 0; }
 .drop-panel {
@@ -486,7 +485,7 @@ html:not(.loaded) .scope-h { transform: scaleX(0); }
 }
 .loaded .t-word { animation: rise 1.8s var(--ease) .15s both; }
 .t-verse-rest { margin-top: 18px; }
-.t-soon { position: relative; min-height: 115vh; padding: 14vh var(--gutter) 0; display: grid; grid-template-rows: auto auto 1fr auto; }
+.t-soon { padding: 14vh var(--gutter) 0; display: grid; grid-template-rows: auto auto 1fr auto; }
 .t-soon-cta { margin-top: 4vh; max-width: min(400px, 32vw); }
 .t-links { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; margin-top: 26px; }
 .t-links .add { width: auto; padding: 0 22px; }
@@ -505,7 +504,7 @@ html:not(.loaded) .scope-h { transform: scaleX(0); }
   .hero-word { top: 30%; width: 84vw; }
   .statement { min-height: 100vh; align-items: flex-start; padding-top: 14vh; }
   .lb-label { display: none; }
-  .shop { --hold: 0px; }
+  .pinned { --hold: 0px; }
   .p-title { font-size: 19vw; top: 26%; }
   .p-eyebrow { top: 13vh; }
   .chooser-grid { grid-template-columns: 1fr; }
@@ -517,7 +516,7 @@ html:not(.loaded) .scope-h { transform: scaleX(0); }
   .t-soon-gap { height: 42vh; }
   .t-stats { grid-template-columns: repeat(2, 1fr); }
   .t-soon-cta { max-width: none; }
-  .shop-pin { position: relative; top: auto; }
+  .pin { position: relative; top: auto; }
   .statement .ref { margin-top: 28px; }
 .statement-text { font-size: 14vw; }
   .drop-note { grid-row: 2; align-self: start; max-width: 380px; margin-top: 4vh; position: relative; z-index: 2; font-size: clamp(16px, 1.3vw, 19px); }

@@ -3,6 +3,7 @@ import { FillStatement, SectionTitle, Wordmark } from '../hud'
 import { Link } from '../router'
 import { DROPS } from '../drops'
 import { ui } from '../poses'
+import { PinnedSection } from '../pinned'
 
 // Hovering a drop previews it on the 3D tee: BELIEVE 01 with its prints,
 // BELIEVE 02 as a blank silhouette.
@@ -54,7 +55,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="drops" className="chooser" data-pose="chooser">
+      <PinnedSection id="drops" pose="chooser" className="chooser">
         <SectionTitle n={String(DROPS.length).padStart(2, '0')}>Drops</SectionTitle>
         <p className="chooser-sub lead reveal">
           Choose a drop. <span className="dim">One on the way.</span>
@@ -64,7 +65,7 @@ export default function Home() {
           <div className="chooser-gap" />
           <DropPanel d={DROPS[1]} />
         </div>
-      </section>
+      </PinnedSection>
     </>
   )
 }

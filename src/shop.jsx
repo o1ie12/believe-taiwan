@@ -1,7 +1,8 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { scroll } from './scroll'
 import { ui } from './poses'
+import { PinnedSection } from './pinned'
 
 // Shopee listing links. Paste them in when the listings are live. With one
 // listing for both colours, use the same link for each. Empty = "Coming soon".
@@ -116,23 +117,10 @@ export function ProductCard({ p }) {
   )
 }
 
-// The shop pins once it's fully on screen and holds for a moment (--hold in
-// index.css: 70vh on desktop, none on phones) before the footer comes up. The
-// pinned block is the tee's "shop" pose anchor, so the tee stays put meanwhile.
-
 export function ShopSection({ children }) {
-  const section = useRef()
-  const pin = useRef()
-  useLayoutEffect(() => {
-    const ro = new ResizeObserver(() => section.current.style.setProperty('--pin-h', `${pin.current.offsetHeight}px`))
-    ro.observe(pin.current)
-    return () => ro.disconnect()
-  }, [])
   return (
-    <section id="shop" className="shop" ref={section}>
-      <div className="shop-pin" ref={pin} data-pose="shop">
-        {children}
-      </div>
-    </section>
+    <PinnedSection id="shop" pose="shop" className="shop-pin">
+      {children}
+    </PinnedSection>
   )
 }
