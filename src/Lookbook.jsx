@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { scroll } from './scroll'
 
-const HERO = { src: '/lookbook/taipei-101.jpg', alt: 'Back view of the white Believe tee overlooking Taipei 101' }
+const HERO = { src: '/lookbook/taipei-101.jpg', alt: 'Back view of the white BELIEVE 01 tee overlooking Taipei 101' }
 
 const PHOTOS = [
-  { src: '/lookbook/pillar-duo.jpg', w: 1122, h: 1402, title: 'Night & Day', note: 'Both colorways' },
-  { src: '/lookbook/print-detail.jpg', w: 1350, h: 1800, title: 'Up close', note: 'Puff print, B★ mark' },
-  { src: '/lookbook/car-window-white.jpg', w: 1448, h: 1086, title: 'Off duty', note: 'White / back print' },
-  { src: '/lookbook/garage-walk.jpg', w: 1086, h: 1448, title: 'Level B2', note: 'Black / chest mark' },
-  { src: '/lookbook/flatlay.jpg', w: 1186, h: 1166, title: 'The drop', note: 'BELIEVE 01, laid out' },
-  { src: '/lookbook/car-black.jpg', w: 1088, h: 1448, title: 'Passenger side', note: 'Black / back print' },
+  { src: '/lookbook/pillar-duo.jpg', w: 1122, h: 1402, title: 'Side by side', note: 'Black and white' },
+  { src: '/lookbook/print-detail.jpg', w: 1350, h: 1800, title: 'Both prints', note: 'B★ front, BELIEVE back' },
+  { src: '/lookbook/car-window-white.jpg', w: 1448, h: 1086, title: 'Window seat', note: 'White · back print' },
+  { src: '/lookbook/garage-walk.jpg', w: 1086, h: 1448, title: 'Underground', note: 'Black · chest mark' },
+  { src: '/lookbook/flatlay.jpg', w: 1186, h: 1166, title: 'Laid out', note: 'BELIEVE 01 in both colorways' },
+  { src: '/lookbook/car-black.jpg', w: 1088, h: 1448, title: 'Through the glass', note: 'Black · back print' },
 ]
 
 // The horizontal track, left to right. Photos: `h` = height and `top` = offset
@@ -220,7 +220,7 @@ export default function Lookbook() {
                   <div className="hs-item hs-text hs-intro" key={k}>
                     <p className="eyebrow">05 — Lookbook</p>
                     <h2>Worn, not styled.</h2>
-                    <p className="hs-body">Shot around Taipei on the people who wear it. Tap any photo to open it.</p>
+                    <p className="hs-body">Shot around Taipei. Tap any photo to open it.</p>
                     <p className="mono hs-hint">Keep scrolling →</p>
                   </div>
                 )

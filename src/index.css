@@ -370,8 +370,9 @@ html:not(.loaded) .scope-h { transform: scaleX(0); }
 .hs-cta span { transition: transform .5s var(--ease); }
 .hs-cta:hover span { transform: translateX(12px); }
 
-.hs-photo { margin: 0; padding-top: calc(var(--top) * 1vh - 26px); }
-.hs-photo figcaption { height: 26px; display: flex; gap: 10px; align-items: flex-start; white-space: nowrap; opacity: calc(var(--e) * 0.75); }
+/* width: min-content keeps the figure as wide as its photo, so long captions wrap instead of overhanging */
+.hs-photo { margin: 0; width: min-content; padding-top: calc(var(--top) * 1vh - 26px); }
+.hs-photo figcaption { min-height: 26px; padding-bottom: 8px; display: flex; gap: 10px; align-items: flex-start; line-height: 1.4; opacity: calc(var(--e) * 0.75); }
 .hs-photo figcaption span { opacity: 0.55; }
 .hs-media {
   height: calc(var(--h) * 1vh); overflow: hidden; border-radius: 4px; cursor: none; background: #151515;

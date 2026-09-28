@@ -9,7 +9,7 @@ import { ui } from './poses'
 import { MODEL, useModelAvailable } from './model'
 
 function Wordmark({ className = '' }) {
-  return <img className={`wordmark ${className}`} src="/brand/wordmark.png" alt="Believe Taiwan" />
+  return <img className={`wordmark ${className}`} src="/brand/wordmark.png" alt="BELIEVE" />
 }
 
 // Shopee listing links. Paste them in when the listings are live. With one
@@ -269,7 +269,7 @@ export default function App() {
         </div>
         <div className="footer-grid">
           <div>
-            <img className="footer-mark" src="/brand/mark.png" alt="Believe B★ mark" />
+            <img className="footer-mark" src="/brand/mark.png" alt="BELIEVE B★ mark" />
             <p className="muted mono">25.0330° N — 121.5654° E</p>
           </div>
           <form
@@ -295,7 +295,7 @@ export default function App() {
           </div>
         </div>
         <div className="copyright muted">
-          <p className="mono">© 2026 Believe Taiwan — Soli Deo gloria</p>
+          <p className="mono">© 2026 BELIEVE — Soli Deo gloria</p>
           <p className="notice">
             Scripture quotations taken from The Holy Bible, New International Version® NIV®. Copyright © 1973, 1978, 1984, 2011 by Biblica, Inc.™ Used by permission. All rights reserved worldwide. “Not I, but Christ” from Galatians 2:20 (KJV).
           </p>

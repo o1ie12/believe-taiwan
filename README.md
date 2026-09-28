@@ -1,6 +1,7 @@
-# BELIEVE Taiwan
+# BELIEVE
 
-Website for **BELIEVE 01** — a limited run of 40 tees in black and white, NT$700.
+Website for **BELIEVE**, a Christian streetwear brand from Taiwan, launching the **BELIEVE 01** tee —
+a limited run of 40 pieces in black and white, NT$700.
 Built with Vite, React and three.js (react-three-fiber).
 
 ## Develop

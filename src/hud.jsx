@@ -45,7 +45,7 @@ export function Loader() {
   if (phase === 'gone') return null
   return (
     <div className={`loader ${phase}`} aria-hidden="true">
-      <span className="loader-corner tl mono">[ BELIEVE 01 ]</span>
+      <span className="loader-corner tl mono">[ BELIEVE ]</span>
       <span className="loader-corner tr mono">[ MARK 9:23 ]</span>
       <span className="loader-corner bl mono">25.0330° N — 121.5654° E</span>
       <span className="loader-corner br mono">[ LOADING ]</span>
@@ -97,7 +97,7 @@ function Menu({ onClose }) {
           </a>
         ))}
       </nav>
-      <p className="menu-foot mono">BELIEVE 01 — Everything is possible for one who believes — Mark 9:23</p>
+      <p className="menu-foot mono">BELIEVE — Everything is possible for one who believes — Mark 9:23</p>
     </div>
   )
 }
@@ -119,7 +119,7 @@ export function InfoBar() {
   return (
     <>
       <header className="bar">
-        <a href="#top" className="bar-logo" aria-label="Believe — back to top">
+        <a href="#top" className="bar-logo" aria-label="BELIEVE — back to top">
           <img src="/brand/wordmark.png" alt="" />
         </a>
         <span className="bar-item bar-dot">BELIEVE 01 — Limited tee</span>
