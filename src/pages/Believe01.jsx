@@ -94,7 +94,7 @@ export default function Believe01() {
       <ShopSection>
         <SectionTitle n="07">Shop</SectionTitle>
         <p className="shop-sub lead reveal">
-          BELIEVE 01. <span className="dim">{PRICE} · Limited to 40 pieces total across black and white. Wear what you believe.</span>
+          BELIEVE 01. <span className="dim">{PRICE} · Limited to 40 pieces total across black and white.</span>
         </p>
         <div className="shop-grid">
           <ProductCard p={PRODUCTS[0]} />

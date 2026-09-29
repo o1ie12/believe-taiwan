@@ -50,8 +50,8 @@ export default function Home() {
 
       <section className="statement" data-pose="statement">
         <div>
-          <FillStatement lines={['Forty shirts.', 'Two colorways.', 'One word.']} />
-          <p className="ref mono reveal">[ BELIEVE 01 ]</p>
+          <FillStatement lines={['Wear what', 'you believe.']} />
+          <p className="ref mono reveal">[ BELIEVE — Taiwan ]</p>
         </div>
       </section>
 
