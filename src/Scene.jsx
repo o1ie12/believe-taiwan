@@ -322,14 +322,21 @@ export function CardScene({ white, ink, trackRef, offset = 0 }) {
   )
 }
 
-// drei <View> (shop gallery cards) leaves the renderer's viewport on the last
-// card it drew, so after visiting /shop the main tee would render into that
-// small rectangle. Reset to the full canvas at the start of every frame.
+// drei <View> (the /shop gallery cards) leaks state into the main canvas:
+// it leaves the renderer's viewport on the last card it drew, and resizing a
+// card's view also rewrites the MAIN camera's aspect to the card's shape.
+// Left alone, the scroll tee renders small and stretched after visiting /shop,
+// so restore both at the start of every frame.
 function FullViewport() {
-  useFrame(({ gl, size }) => {
+  useFrame(({ gl, size, camera }) => {
     gl.setViewport(0, 0, size.width, size.height)
     gl.setScissor(0, 0, size.width, size.height)
     gl.setScissorTest(false)
+    const aspect = size.width / size.height
+    if (camera.isPerspectiveCamera && Math.abs(camera.aspect - aspect) > 1e-4) {
+      camera.aspect = aspect
+      camera.updateProjectionMatrix()
+    }
   })
   return null
 }
@@ -352,9 +359,10 @@ export default function Scene() {
         dpr={[1, 2]}
         camera={{ position: [0, 0, 12], fov: 30 }}
         gl={{ antialias: true, alpha: true }}
-        onCreated={({ gl }) => {
+        onCreated={({ gl, get }) => {
           gl.toneMapping = THREE.NeutralToneMapping
           gl.toneMappingExposure = 1.05
+          if (import.meta.env.DEV) window.__r3f = get // for scripted testing
         }}
       >
         <FullViewport />
