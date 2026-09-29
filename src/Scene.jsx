@@ -322,6 +322,18 @@ export function CardScene({ white, ink, trackRef, offset = 0 }) {
   )
 }
 
+// drei <View> (shop gallery cards) leaves the renderer's viewport on the last
+// card it drew, so after visiting /shop the main tee would render into that
+// small rectangle. Reset to the full canvas at the start of every frame.
+function FullViewport() {
+  useFrame(({ gl, size }) => {
+    gl.setViewport(0, 0, size.width, size.height)
+    gl.setScissor(0, 0, size.width, size.height)
+    gl.setScissorTest(false)
+  })
+  return null
+}
+
 function Studio({ resolution = 256 }) {
   return (
     <Environment resolution={resolution}>
@@ -345,6 +357,7 @@ export default function Scene() {
           gl.toneMappingExposure = 1.05
         }}
       >
+        <FullViewport />
         <ambientLight intensity={0.35} />
         <directionalLight position={[-4, 6, 7]} intensity={3} />
         <directionalLight position={[6, 3, -5]} intensity={4} color="#e6ecff" />
