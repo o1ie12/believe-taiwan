@@ -304,12 +304,8 @@ html:not(.loaded) .scope-h { transform: scaleX(0); }
 @keyframes marquee { to { transform: translateX(-50%); } }
 .footer-grid { display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 40px; padding: 56px var(--gutter) 40px; align-items: start; }
 .footer-mark { width: 72px; display: block; margin-bottom: 16px; }
-.newsletter { display: grid; gap: 14px; }
-.field { display: flex; border-bottom: 1px solid rgba(238,237,232,0.4); }
-.field input { flex: 1; background: none; border: 0; color: var(--fg); font: inherit; font-size: 18px; font-weight: 300; padding: 12px 0; outline: none; }
-.field input::placeholder { color: #4a4a47; }
-.field button { font-size: 13px; padding: 0 4px; }
-.joined { font-size: 18px; font-weight: 300; padding: 12px 0; }
+.follow { display: grid; gap: 14px; align-content: start; }
+.follow-btn { width: auto; justify-self: start; padding: 0 22px; }
 .links { display: grid; gap: 8px; justify-items: end; font-size: 14px; }
 .links a { color: var(--muted); transition: color .2s; }
 .links a:hover { color: var(--fg); }

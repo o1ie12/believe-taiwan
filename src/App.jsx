@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import Lenis from 'lenis'
 import Scene from './Scene'
 import { scroll } from './scroll'
@@ -12,8 +12,9 @@ import ShopPage from './pages/ShopPage'
 
 const ROUTES = { '/': Home, '/believe-01': Believe01, '/believe-02': Believe02, '/shop': ShopPage }
 
+const INSTAGRAM = 'https://www.instagram.com/believeapparel__/'
+
 function Footer() {
-  const [joined, setJoined] = useState(false)
   const hasModel = useModelAvailable()
   return (
     <footer className="footer">
@@ -29,26 +30,15 @@ function Footer() {
           <img className="footer-mark" src="/brand/mark.png" alt="BELIEVE B★ mark" />
           <p className="muted mono">25.0330° N — 121.5654° E</p>
         </div>
-        <form
-          className="newsletter"
-          onSubmit={(e) => {
-            e.preventDefault()
-            setJoined(true)
-          }}
-        >
-          <label htmlFor="email" className="eyebrow">Next drop — first to know</label>
-          {joined ? (
-            <p className="joined">You’re on the list.</p>
-          ) : (
-            <div className="field">
-              <input id="email" type="email" required placeholder="you@email.com" />
-              <button type="submit">Join</button>
-            </div>
-          )}
-        </form>
+        <div className="follow">
+          <p className="eyebrow">Next drop — first to know</p>
+          <a className="add follow-btn" href={INSTAGRAM} target="_blank" rel="noopener">
+            Follow @believeapparel__ <span aria-hidden="true">→</span>
+          </a>
+        </div>
         <div className="links">
-          <a href="https://www.instagram.com/believeapparel__/" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://www.instagram.com/believeapparel__/" target="_blank" rel="noopener">Contact</a>
+          <a href={INSTAGRAM} target="_blank" rel="noopener">Instagram</a>
+          <a href={INSTAGRAM} target="_blank" rel="noopener">Contact</a>
         </div>
       </div>
       <div className="copyright muted">
