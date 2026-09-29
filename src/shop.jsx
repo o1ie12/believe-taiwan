@@ -11,7 +11,8 @@ const SHOPEE = {
   white: '',
 }
 
-export const PRICE = 'NT$700'
+// Single source for the BELIEVE 01 price; every on-page mention reads this.
+export const PRICE = 'NT$750'
 export const SIZES = ['S', 'M', 'L']
 // Measurements in cm, from the official BELIEVE sizing chart.
 export const SIZE_CHART = {

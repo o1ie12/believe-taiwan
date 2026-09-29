@@ -1,3 +1,5 @@
+import { PRICE } from './shop'
+
 // Every drop shown on the home page chooser and in the menu.
 // Only BELIEVE 01 has confirmed details; BELIEVE 02 is a teaser.
 export const DROPS = [
@@ -6,7 +8,7 @@ export const DROPS = [
     path: '/believe-01',
     name: 'BELIEVE 01',
     meta: '40 pieces · Black / White',
-    price: 'NT$700',
+    price: PRICE,
     cta: 'Explore',
     soon: false,
   },

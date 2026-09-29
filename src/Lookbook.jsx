@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { scroll } from './scroll'
+import { PRICE } from './shop'
 
 const HERO = { src: '/lookbook/taipei-101.jpg', alt: 'Back view of the white BELIEVE 01 tee overlooking Taipei 101' }
 
@@ -241,7 +242,7 @@ export default function Lookbook() {
                   <div className="hs-item hs-text hs-end" key={k}>
                     <p className="eyebrow">BELIEVE 01</p>
                     <a href="#shop" className="hs-cta">Shop the drop <span aria-hidden="true">→</span></a>
-                    <p className="hs-body">Forty pieces. Black and white. NT$700.</p>
+                    <p className="hs-body">Forty pieces. Black and white. {PRICE}.</p>
                   </div>
                 )
               const p = PHOTOS[item.i]

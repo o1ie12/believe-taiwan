@@ -3,6 +3,7 @@ import { useProgress } from '@react-three/drei'
 import { scroll } from './scroll'
 import { Link, useRouter } from './router'
 import { DROPS, SECTIONS_01 } from './drops'
+import { PRICE } from './shop'
 
 const clamp = (x, a, b) => Math.min(b, Math.max(a, x))
 
@@ -222,7 +223,7 @@ export function FillStatement({ lines }) {
 
 const STATS = [
   ['40', 'Pieces total'],
-  ['NT$700', 'One price'],
+  [PRICE, 'One price'],
   ['S — L', 'Three sizes'],
   ['2', 'Colorways'],
 ]

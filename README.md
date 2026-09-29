@@ -1,7 +1,7 @@
 # BELIEVE
 
 Website for **BELIEVE**, a Christian streetwear brand from Taiwan, launching the **BELIEVE 01** tee —
-a limited run of 40 pieces in black and white, NT$700.
+a limited run of 40 pieces in black and white, NT$750.
 Built with Vite, React and three.js (react-three-fiber).
 
 ## Develop
