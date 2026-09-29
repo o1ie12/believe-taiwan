@@ -26,6 +26,9 @@ const BASE = {
   // "Next: BELIEVE 02" — same spot, prints fade to the silhouette
   next:      { rotY: TAU * 3 + 0.35, rotX: 0,     x: 0,    y: -0.3,  scale: 0.72, white: 0, hud: 0, ink: 0 },
 
+  // Shop gallery: cards draw their own tees, so the scroll tee leaves the frame
+  gallery:   { rotY: TAU * 3,        rotX: 0,     x: 0,    y: 6,     scale: 0.6,  white: 0, hud: 0 },
+
   // BELIEVE 02 teaser: a blank silhouette in the scope
   't-hero':  { rotY: 0.4,            rotX: 0.05,  x: 0,    y: -0.2,  scale: 1.0,  white: 0, hud: 1, ink: 0 },
   't-verse': { rotY: Math.PI + 0.6,  rotX: 0.04,  x: 1.9,  y: -0.1,  scale: 0.95, white: 0, hud: 1, ink: 0 },

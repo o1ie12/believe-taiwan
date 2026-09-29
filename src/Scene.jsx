@@ -1,6 +1,6 @@
-import { Component, Suspense, useMemo, useRef } from 'react'
+import { Component, Suspense, useEffect, useMemo, useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Environment, Lightformer, useGLTF, useTexture } from '@react-three/drei'
+import { Environment, Lightformer, PerspectiveCamera, useGLTF, useTexture, View } from '@react-three/drei'
 import * as THREE from 'three'
 import { createFabricTexture, createRibTexture, createTee } from './tee'
 import { MODEL, prepareModel, useModelAvailable } from './model'
@@ -14,11 +14,14 @@ const INK_WHITE = new THREE.Color('#f4f3ee')
 const INK_BLACK = new THREE.Color('#0d0d0d')
 const KEYS = Object.keys(POSES[Object.keys(POSES)[0]])
 
-const pointer = { x: 0, y: 0 }
+// Pointer in normalised (-1..1) and pixel coordinates, shared by every tee.
+export const pointer = { x: 0, y: 0, px: -1e4, py: -1e4 }
 if (typeof window !== 'undefined') {
   window.addEventListener('pointermove', (e) => {
     pointer.x = (e.clientX / window.innerWidth) * 2 - 1
     pointer.y = (e.clientY / window.innerHeight) * 2 - 1
+    pointer.px = e.clientX
+    pointer.py = e.clientY
   })
 }
 
@@ -54,16 +57,26 @@ function readScrollPose(out, table = POSES) {
   return out
 }
 
-function ProceduralTee() {
-  const tee = useMemo(() => createTee(), [])
-  return <Tee tee={tee} fabricRepeat={1.4} />
+// ---- Shared tee building blocks (main scroll tee + shop gallery cards) ----
+
+let proceduralCache
+const preparedCache = new WeakMap()
+const textureCache = new Map()
+const cached = (key, make) => textureCache.get(key) || textureCache.set(key, make()).get(key)
+
+function ProceduralTeeData({ render }) {
+  const tee = useMemo(() => (proceduralCache ||= createTee()), [])
+  return render(tee, 1.4)
 }
 
-function ModelTee() {
+function ModelTeeData({ render }) {
   const { scene } = useGLTF(MODEL.url)
-  const tee = useMemo(() => prepareModel(scene), [scene])
+  const tee = useMemo(() => {
+    if (!preparedCache.has(scene)) preparedCache.set(scene, prepareModel(scene))
+    return preparedCache.get(scene)
+  }, [scene])
   // glTF UVs usually span 0–1 across the whole garment, so tile the knit finer
-  return <Tee tee={tee} fabricRepeat={16} />
+  return render(tee, 16)
 }
 
 // If tee.glb fails to load or parse, fall back to the procedural shirt.
@@ -76,26 +89,50 @@ class ModelBoundary extends Component {
     console.warn('[believe] tee.glb failed, using procedural tee:', err)
   }
   render() {
-    return this.state.failed ? <ProceduralTee /> : this.props.children
+    return this.state.failed ? <ProceduralTeeData render={this.props.render} /> : this.props.children
   }
 }
 
-function Tee({ tee, fabricRepeat }) {
-  const group = useRef()
-  const { size } = useThree()
+// Resolves the tee geometry (real model if present, else procedural) and
+// hands it to `render(tee, fabricRepeat)`.
+export function WithTee({ render }) {
+  const hasModel = useModelAvailable()
+  if (hasModel === null) return null
+  return hasModel ? (
+    <ModelBoundary render={render}>
+      <ModelTeeData render={render} />
+    </ModelBoundary>
+  ) : (
+    <ProceduralTeeData render={render} />
+  )
+}
 
-  const fabric = useMemo(() => createFabricTexture(fabricRepeat), [fabricRepeat])
-  const rib = useMemo(() => createRibTexture(), [])
+function useTeeMaterials(tee, fabricRepeat) {
+  const fabric = cached(`fabric:${fabricRepeat}`, () => createFabricTexture(fabricRepeat))
+  const rib = cached('rib', () => createRibTexture())
   const [frontTex, backTex] = useTexture(['/brand/mark.png', '/brand/wordmark.png'], (texs) =>
     texs.forEach((t) => {
       t.colorSpace = THREE.SRGBColorSpace
       t.anisotropy = 8
     }),
   )
-
-  const outerMat = useMemo(
-    () =>
-      new THREE.MeshPhysicalMaterial({
+  return useMemo(() => {
+    const ink = (map) =>
+      new THREE.MeshStandardMaterial({
+        map,
+        color: INK_WHITE.clone(),
+        transparent: true,
+        roughness: 0.85,
+        metalness: 0,
+        envMapIntensity: 0.4,
+        bumpMap: fabric,
+        bumpScale: 0.4,
+        depthWrite: false,
+        polygonOffset: true,
+        polygonOffsetFactor: -4,
+      })
+    return {
+      outer: new THREE.MeshPhysicalMaterial({
         color: FABRIC_BLACK.clone(),
         vertexColors: true,
         roughness: 0.92,
@@ -106,11 +143,7 @@ function Tee({ tee, fabricRepeat }) {
         bumpScale: 0.8,
         side: tee.doubleSided ? THREE.DoubleSide : THREE.FrontSide,
       }),
-    [fabric, tee.doubleSided],
-  )
-  const bandMat = useMemo(
-    () =>
-      new THREE.MeshPhysicalMaterial({
+      band: new THREE.MeshPhysicalMaterial({
         color: FABRIC_BLACK.clone(),
         roughness: 0.9,
         sheen: 1,
@@ -119,29 +152,53 @@ function Tee({ tee, fabricRepeat }) {
         bumpMap: rib,
         bumpScale: 1.5,
       }),
-    [rib],
+      // the inside of the shirt, seen through the neck, hem and cuffs
+      inner: new THREE.MeshStandardMaterial({ color: FABRIC_BLACK.clone(), roughness: 1, side: THREE.BackSide }),
+      front: ink(frontTex),
+      back: ink(backTex),
+    }
+  }, [fabric, rib, frontTex, backTex, tee.doubleSided])
+}
+
+// white: 0 = black tee / white print, 1 = white tee / black print. ink: print opacity.
+function applyLook(m, white, ink) {
+  m.outer.color.lerpColors(FABRIC_BLACK, FABRIC_WHITE, white)
+  m.outer.sheenColor.lerpColors(SHEEN_BLACK, SHEEN_WHITE, white)
+  m.band.color.copy(m.outer.color)
+  m.band.sheenColor.copy(m.outer.sheenColor)
+  m.inner.color.copy(m.outer.color).multiplyScalar(0.4)
+  m.front.color.lerpColors(INK_WHITE, INK_BLACK, white)
+  m.back.color.copy(m.front.color)
+  m.front.opacity = m.back.opacity = ink
+  m.front.visible = m.back.visible = ink > 0.01
+}
+
+function TeeMeshes({ tee, m }) {
+  return (
+    <>
+      {tee.shell.map((geo, i) => (
+        <group key={i}>
+          <mesh geometry={geo} material={m.outer} />
+          {!tee.doubleSided && <mesh geometry={geo} material={m.inner} />}
+        </group>
+      ))}
+      {tee.bands.map((geo, i) => (
+        <mesh key={i} geometry={geo} material={m.band} />
+      ))}
+      {tee.stitches.map((geo, i) => (
+        <mesh key={`s${i}`} geometry={geo} material={m.band} />
+      ))}
+      <mesh geometry={tee.frontPrint} material={m.front} />
+      <mesh geometry={tee.backPrint} material={m.back} />
+    </>
   )
-  // The inside of the shirt, seen through the neck, hem and cuffs.
-  const innerMat = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: FABRIC_BLACK.clone(), roughness: 1, side: THREE.BackSide }),
-    [],
-  )
-  const inkMat = (map) =>
-    new THREE.MeshStandardMaterial({
-      map,
-      color: INK_WHITE.clone(),
-      transparent: true,
-      roughness: 0.85,
-      metalness: 0,
-      envMapIntensity: 0.4,
-      bumpMap: fabric,
-      bumpScale: 0.4,
-      depthWrite: false,
-      polygonOffset: true,
-      polygonOffsetFactor: -4,
-    })
-  const frontMat = useMemo(() => inkMat(frontTex), [frontTex])
-  const backMat = useMemo(() => inkMat(backTex), [backTex])
+}
+
+function Tee({ tee, fabricRepeat }) {
+  const group = useRef()
+  const { size } = useThree()
+
+  const m = useTeeMaterials(tee, fabricRepeat)
 
   // Start below and turned away so the tee "arrives" on load.
   const cur = useRef({ rotY: -Math.PI * 1.2, rotX: 0.5, x: 0, y: -4.5, scale: 0.7, white: 0, hud: 0, ink: 1 })
@@ -198,41 +255,76 @@ function Tee({ tee, fabricRepeat }) {
       }
     }
 
-    outerMat.color.lerpColors(FABRIC_BLACK, FABRIC_WHITE, c.white)
-    outerMat.sheenColor.lerpColors(SHEEN_BLACK, SHEEN_WHITE, c.white)
-    bandMat.color.copy(outerMat.color)
-    bandMat.sheenColor.copy(outerMat.sheenColor)
-    innerMat.color.copy(outerMat.color).multiplyScalar(0.4)
-    frontMat.color.lerpColors(INK_WHITE, INK_BLACK, c.white)
-    backMat.color.copy(frontMat.color)
-    // prints fade out for the BELIEVE 02 silhouette
-    frontMat.opacity = backMat.opacity = c.ink
-    frontMat.visible = backMat.visible = c.ink > 0.01
+    // colorway + prints (prints fade out for the BELIEVE 02 silhouette)
+    applyLook(m, c.white, c.ink)
   })
 
   return (
     <group ref={group}>
-      {tee.shell.map((geo, i) => (
-        <group key={i}>
-          <mesh geometry={geo} material={outerMat} />
-          {!tee.doubleSided && <mesh geometry={geo} material={innerMat} />}
-        </group>
-      ))}
-      {tee.bands.map((geo, i) => (
-        <mesh key={i} geometry={geo} material={bandMat} />
-      ))}
-      {tee.stitches.map((geo, i) => (
-        <mesh key={`s${i}`} geometry={geo} material={bandMat} />
-      ))}
-      <mesh geometry={tee.frontPrint} material={frontMat} />
-      <mesh geometry={tee.backPrint} material={backMat} />
+      <TeeMeshes tee={tee} m={m} />
     </group>
   )
 }
 
-function Studio() {
+const TAU = Math.PI * 2
+
+// Card tee: spins slowly; while the pointer is over its card it turns to face it.
+function CardTee({ tee, fabricRepeat, white, ink, trackRef, offset }) {
+  const g = useRef()
+  const m = useTeeMaterials(tee, fabricRepeat)
+  const st = useRef({ ang: offset, tilt: 0.04 })
+  useEffect(() => applyLook(m, white, ink), [m, white, ink])
+  useFrame((state, dt) => {
+    dt = Math.min(dt, 0.05)
+    const el = trackRef.current
+    if (!el || !g.current) return
+    const r = el.getBoundingClientRect()
+    const lx = ((pointer.px - r.left) / r.width) * 2 - 1
+    const ly = ((pointer.py - r.top) / r.height) * 2 - 1
+    const s = st.current
+    if (Math.abs(lx) < 1 && Math.abs(ly) < 1) {
+      // face the cursor, taking the shortest way round from the current spin
+      const base = lx * 0.8
+      const want = base + Math.round((s.ang - base) / TAU) * TAU
+      s.ang = THREE.MathUtils.damp(s.ang, want, 5, dt)
+      s.tilt = THREE.MathUtils.damp(s.tilt, ly * 0.3, 5, dt)
+    } else {
+      s.ang += dt * 0.45
+      s.tilt = THREE.MathUtils.damp(s.tilt, 0.04, 3, dt)
+    }
+    g.current.rotation.set(s.tilt, s.ang, 0)
+    g.current.position.y = Math.sin(state.clock.elapsedTime * 0.9 + offset) * 0.05 - 0.05
+  })
   return (
-    <Environment resolution={256}>
+    <group ref={g}>
+      <TeeMeshes tee={tee} m={m} />
+    </group>
+  )
+}
+
+export function CardScene({ white, ink, trackRef, offset = 0 }) {
+  return (
+    <>
+      <PerspectiveCamera makeDefault position={[0, 0, 9.5]} fov={30} />
+      <ambientLight intensity={0.35} />
+      <directionalLight position={[-4, 6, 7]} intensity={3} />
+      <directionalLight position={[6, 3, -5]} intensity={4} color="#e6ecff" />
+      <directionalLight position={[-6, 1, -4]} intensity={2.5} />
+      <Studio resolution={128} />
+      <Suspense fallback={null}>
+        <WithTee
+          render={(tee, rep) => (
+            <CardTee tee={tee} fabricRepeat={rep} white={white} ink={ink} trackRef={trackRef} offset={offset} />
+          )}
+        />
+      </Suspense>
+    </>
+  )
+}
+
+function Studio({ resolution = 256 }) {
+  return (
+    <Environment resolution={resolution}>
       <Lightformer form="rect" intensity={3} position={[0, 4, 6]} scale={[8, 3, 1]} />
       <Lightformer form="rect" intensity={2} position={[-6, 1, 2]} rotation-y={Math.PI / 2} scale={[6, 4, 1]} />
       <Lightformer form="rect" intensity={4} position={[6, 2, -4]} rotation-y={-Math.PI / 2} scale={[4, 6, 1]} />
@@ -242,7 +334,6 @@ function Studio() {
 }
 
 export default function Scene() {
-  const hasModel = useModelAvailable()
   return (
     <div className="scene">
       <Canvas
@@ -261,13 +352,10 @@ export default function Scene() {
         <directionalLight position={[4, -3, 4]} intensity={0.5} />
         <Studio />
         <Suspense fallback={null}>
-          {hasModel === true && (
-            <ModelBoundary>
-              <ModelTee />
-            </ModelBoundary>
-          )}
-          {hasModel === false && <ProceduralTee />}
+          <WithTee render={(tee, rep) => <Tee tee={tee} fabricRepeat={rep} />} />
         </Suspense>
+        {/* shop gallery cards render their own tees into this canvas */}
+        <View.Port />
       </Canvas>
     </div>
   )

@@ -3,7 +3,7 @@ import { scroll } from './scroll'
 
 // Tiny client-side router: three pages, history API, and a curtain that wipes
 // across the screen while the page underneath swaps.
-export const PAGES = ['/', '/believe-01', '/believe-02']
+export const PAGES = ['/', '/believe-01', '/believe-02', '/shop']
 
 const clean = (p) => {
   const path = p.replace(/\/+$/, '') || '/'

@@ -454,6 +454,32 @@ html:not(.loaded) .scope-h { transform: scaleX(0); }
 .fit-table dd { font-size: 24px; font-weight: 300; letter-spacing: -0.02em; margin-top: 4px; font-variant-numeric: tabular-nums; }
 .fit-table small { font-size: 12px; color: var(--muted); }
 
+/* ---------- Shop gallery page ---------- */
+.gallery-page { position: relative; min-height: 100vh; padding: 14vh var(--gutter) 12vh; }
+.g-sub { margin: 4vh 0 6vh; position: relative; z-index: 2; }
+.g-grid { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+/* no background: the 3D tee is drawn by the canvas underneath the card */
+.g-card { position: relative; display: grid; border: 1px solid var(--line); border-radius: 6px; transition: border-color .3s; }
+.g-card:hover { border-color: rgba(238,237,232,0.35); }
+.g-card.is-soon { border-style: dashed; }
+.g-stage { position: relative; aspect-ratio: 4 / 5; border-bottom: 1px solid var(--line); }
+.g-view { position: absolute; inset: 0; }
+.g-stage::before, .g-stage::after {
+  content: ''; position: absolute; width: 14px; height: 14px; pointer-events: none;
+  border-color: rgba(238,237,232,0.4); border-style: solid;
+}
+.g-stage::before { left: 14px; bottom: 14px; border-width: 0 0 1px 1px; }
+.g-stage::after { right: 14px; bottom: 14px; border-width: 0 1px 1px 0; }
+.g-tag { position: absolute; top: 14px; left: 14px; color: var(--muted); }
+.g-index { position: absolute; top: 14px; right: 14px; color: var(--muted); }
+.g-info { display: grid; gap: 4px; padding: 22px; }
+.g-info h3 { font-weight: 300; font-size: 30px; letter-spacing: -0.03em; margin-top: 14px; }
+.g-card.is-soon h3 { color: var(--muted); }
+.g-sizes { font-size: 13px; color: var(--muted); margin: 6px 0 16px; }
+.g-links { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
+.g-details { font-size: 12px; color: var(--muted); transition: color .2s; }
+.g-details:hover { color: var(--fg); }
+
 /* ---------- Page curtain ---------- */
 .curtain {
   position: fixed; inset: 0; z-index: 90; background: var(--bg);
@@ -534,6 +560,8 @@ html:not(.loaded) .scope-h { transform: scaleX(0); }
   .statement { min-height: 100vh; align-items: flex-start; padding-top: 14vh; }
   .lb-label { display: none; }
   .pinned { --hold: 0px; }
+  .g-grid { grid-template-columns: 1fr; }
+  .g-stage { aspect-ratio: 1 / 1; }
   .p-title { font-size: 19vw; top: 26%; }
   .p-eyebrow { top: 13vh; }
   .chooser-grid { grid-template-columns: 1fr; }

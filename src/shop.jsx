@@ -21,12 +21,19 @@ export const SIZE_CHART = {
   L: { length: 72, chest: 55, shoulder: 53, sleeve: 22 },
 }
 
+// Every card on the /shop gallery. `white`/`ink` set the 3D tee's look.
+export const SHOP_ITEMS = [
+  { id: 'black', name: 'BELIEVE 01', color: 'Black', white: 0, ink: 1, price: PRICE, link: SHOPEE.black, page: '/believe-01' },
+  { id: 'white', name: 'BELIEVE 01', color: 'White', white: 1, ink: 1, price: PRICE, link: SHOPEE.white, page: '/believe-01' },
+  { id: 'b02', name: 'BELIEVE 02', color: 'Coming soon', white: 0, ink: 0, price: 'TBA', soon: true, page: '/believe-02' },
+]
+
 export const PRODUCTS = [
   { id: 'black', name: 'BELIEVE 01', color: 'Black', white: false },
   { id: 'white', name: 'BELIEVE 01', color: 'White', white: true },
 ]
 
-function SizeGuide({ onClose }) {
+export function SizeGuide({ onClose }) {
   useEffect(() => {
     scroll.lenis?.stop()
     const onKey = (e) => e.key === 'Escape' && onClose()

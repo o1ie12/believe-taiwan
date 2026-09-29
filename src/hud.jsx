@@ -82,7 +82,7 @@ function Menu({ onClose }) {
     // wait a frame so smooth scrolling is running again before we move
     requestAnimationFrame(() => navigate(to))
   }
-  const items = [{ path: '/', name: 'Home' }, ...DROPS]
+  const items = [{ path: '/', name: 'Home' }, ...DROPS, { path: '/shop', name: 'Shop' }]
 
   return (
     <div className="menu" role="dialog" aria-modal="true" aria-label="Menu">
@@ -118,6 +118,7 @@ const BAR = {
   '/': ['BELIEVE — Taiwan', 'BELIEVE 01 · BELIEVE 02 soon'],
   '/believe-01': ['BELIEVE 01 — Limited tee', '40 pieces · Black / White'],
   '/believe-02': ['BELIEVE 02 — Coming soon', 'Reveal on Instagram'],
+  '/shop': ['BELIEVE — Shop', 'BELIEVE 01 · BELIEVE 02 soon'],
 }
 
 // Thin technical info bar across the top, with a live Taipei clock.
@@ -146,7 +147,7 @@ export function InfoBar() {
         <span className="bar-item">{b}</span>
         <span className="bar-item mono">TPE {time}</span>
         <div className="bar-actions">
-          <Link to="/believe-01#shop" className="chip">Shop</Link>
+          <Link to="/shop" className="chip">Shop</Link>
           <button className="chip" onClick={() => setOpen(true)} aria-haspopup="dialog">Menu</button>
         </div>
       </header>

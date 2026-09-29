@@ -31,6 +31,7 @@ Set `VITE_SITE_URL` (in `.env` or the host's environment variables) to the live 
 | `/` | Brand home: hero, faith statement, drop chooser | `src/pages/Home.jsx` |
 | `/believe-01` | BELIEVE 01 product page | `src/pages/Believe01.jsx` |
 | `/believe-02` | BELIEVE 02 teaser (no details confirmed yet) | `src/pages/Believe02.jsx` |
+| `/shop` | Gallery of every product: live 3D tee per card, buy links (`SHOP_ITEMS` in `src/shop.jsx`) | `src/pages/ShopPage.jsx` |
 
 Routing is a small in-house router (`src/router.jsx`) with a curtain transition; `public/_redirects`
 makes Netlify serve the app for every URL. Drops shown in the chooser and menu: `src/drops.js`.

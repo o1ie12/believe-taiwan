@@ -8,8 +8,9 @@ import { RouterProvider, useRouter } from './router'
 import Home from './pages/Home'
 import Believe01 from './pages/Believe01'
 import Believe02 from './pages/Believe02'
+import ShopPage from './pages/ShopPage'
 
-const ROUTES = { '/': Home, '/believe-01': Believe01, '/believe-02': Believe02 }
+const ROUTES = { '/': Home, '/believe-01': Believe01, '/believe-02': Believe02, '/shop': ShopPage }
 
 function Footer() {
   const [joined, setJoined] = useState(false)
