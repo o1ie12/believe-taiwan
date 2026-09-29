@@ -53,7 +53,7 @@ function Footer() {
       <div className="copyright muted">
         <p className="mono">© 2026 BELIEVE — Soli Deo gloria</p>
         <p className="notice">
-          Scripture quotations taken from The Holy Bible, New International Version® NIV®. Copyright © 1973, 1978, 1984, 2011 by Biblica, Inc.™ Used by permission. All rights reserved worldwide. “Not I, but Christ” from Galatians 2:20 (KJV).
+          Scripture quotations taken from The Holy Bible, New International Version® NIV®. Copyright © 1973, 1978, 1984, 2011 by Biblica, Inc.™ Used by permission. All rights reserved worldwide.
         </p>
         {hasModel && (
           <p className="notice">

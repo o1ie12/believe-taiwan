@@ -37,9 +37,8 @@ export default function Believe02() {
 
       <section className="statement" data-pose="t-verse">
         <div>
-          <FillStatement lines={['See, I am doing', 'a new thing!']} />
-          <p className="ref mono reveal">[ Isaiah 43:19 ]</p>
-          <p className="lead dim t-verse-rest reveal">Now it springs up; do you not perceive it?</p>
+          <FillStatement lines={['Something new', 'is on the way.']} />
+          <p className="ref mono reveal">[ BELIEVE 02 ]</p>
         </div>
       </section>
 

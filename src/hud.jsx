@@ -53,7 +53,7 @@ export function Loader() {
   return (
     <div className={`loader ${phase}`} aria-hidden="true">
       <span className="loader-corner tl mono">[ BELIEVE ]</span>
-      <span className="loader-corner tr mono">[ MARK 9:23 ]</span>
+      <span className="loader-corner tr mono">[ TAIWAN ]</span>
       <span className="loader-corner bl mono">25.0330° N — 121.5654° E</span>
       <span className="loader-corner br mono">[ LOADING ]</span>
       <div className="loader-center">
@@ -108,7 +108,7 @@ function Menu({ onClose }) {
           </div>
         ))}
       </nav>
-      <p className="menu-foot mono">BELIEVE — Everything is possible for one who believes — Mark 9:23</p>
+      <p className="menu-foot mono">BELIEVE — Taiwan</p>
     </div>
   )
 }
@@ -267,7 +267,7 @@ export function DropStats() {
         <SectionTitle n="05">The Drop</SectionTitle>
         <p className="drop-note lead reveal">
           Forty pieces.{' '}
-          <span className="dim">In Scripture, forty marks a season of testing before a promise — forty days of rain, forty years in the desert, forty days in the wilderness.</span>
+          <span className="dim">In total, across black and white.</span>
         </p>
         <div className="drop-stats">
           <span className="drop-progress"><i /></span>

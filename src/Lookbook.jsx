@@ -19,11 +19,9 @@ const TRACK = [
   { type: 'intro' },
   { type: 'photo', i: 0, h: 62, top: 16 },
   { type: 'photo', i: 1, h: 44, top: 42 },
-  { type: 'quote', text: 'Now faith is confidence in what we hope for and assurance about what we do not see.', ref: 'Hebrews 11:1' },
   { type: 'photo', i: 2, h: 42, top: 20 },
   { type: 'photo', i: 3, h: 56, top: 32 },
   { type: 'photo', i: 4, h: 40, top: 14 },
-  { type: 'quote', text: 'Let your light shine before others.', ref: 'Matthew 5:16' },
   { type: 'photo', i: 5, h: 60, top: 22 },
   { type: 'end' },
 ]
@@ -211,8 +209,8 @@ export default function Lookbook() {
             <span className="lb-title-b">the city</span>
           </h2>
           <div className="lb-caption">
-            <p className="eyebrow">Matthew 5:14 — Taipei</p>
-            <p className="lb-caption-big">You are the light<br />of the world.</p>
+            <p className="eyebrow">Taipei</p>
+            <p className="lb-caption-big">Where it all starts.</p>
           </div>
         </div>
       </section>

@@ -32,9 +32,8 @@ export default function Believe01() {
           <p className="eyebrow">Front</p>
           <p className="lead">
             A star to follow.{' '}
-            <span className="dim">Like the star that led the wise men, the B★ points past itself — for those who run with perseverance the race marked out for them.</span>
+            <span className="dim">The B★ sits small on the chest, italic and leaning forward.</span>
           </p>
-          <p className="ref mono">[ Hebrews 12:1 ]</p>
           <Specs
             rows={[
               ['Print', 'B★ mark'],
@@ -50,10 +49,9 @@ export default function Believe01() {
         <div className="copy reveal">
           <p className="eyebrow">Back</p>
           <p className="lead">
-            Not I, but Christ.{' '}
-            <span className="dim">Look closely: the cross stands where the I should be — carried the way you carry your faith, everywhere you go.</span>
+            The cross in the I.{' '}
+            <span className="dim">Look closely: a cross stands where the I should be. BELIEVE runs shoulder to shoulder, with TAIWAN underneath.</span>
           </p>
-          <p className="ref mono">[ Galatians 2:20 ]</p>
           <Specs
             rows={[
               ['Print', 'BELIEVE wordmark, arched, with TAIWAN beneath'],
@@ -69,10 +67,10 @@ export default function Believe01() {
         <h2 className="behind">Night &amp; Day</h2>
         <div className="colorway-note reveal">
           <p className="lead">
-            The light shines in the darkness,<br />
-            <span className="dim">and the darkness has not overcome it.</span>
+            Black with a white print.<br />
+            <span className="dim">White with a black print.</span>
           </p>
-          <p className="ref mono">[ John 1:5 ] — Black with a white print. White with a black print.</p>
+          <p className="ref mono">[ Two colorways ]</p>
         </div>
       </section>
 

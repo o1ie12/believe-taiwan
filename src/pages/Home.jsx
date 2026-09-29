@@ -50,8 +50,8 @@ export default function Home() {
 
       <section className="statement" data-pose="statement">
         <div>
-          <FillStatement lines={['For we live', 'by faith,', 'not by sight.']} />
-          <p className="ref mono reveal">[ 2 Corinthians 5:7 ]</p>
+          <FillStatement lines={['Forty shirts.', 'Two colorways.', 'One word.']} />
+          <p className="ref mono reveal">[ BELIEVE 01 ]</p>
         </div>
       </section>
 
