@@ -6,9 +6,11 @@ import { PinnedSection } from './pinned'
 
 // Shopee listing links. Paste them in when the listings are live. With one
 // listing for both colours, use the same link for each. Empty = "Coming soon".
+const SHOPEE_STORE = 'https://shopee.tw/shop/910103760'
 const SHOPEE = {
-  black: '',
-  white: '',
+  // Both point at the store for now; swap in each product listing when it's live.
+  black: SHOPEE_STORE,
+  white: SHOPEE_STORE,
 }
 
 // Single source for the BELIEVE 01 price; every on-page mention reads this.
